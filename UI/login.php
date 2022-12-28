@@ -385,21 +385,19 @@ $context = stream_context_create($options);
 $json_data = file_get_contents($url, false, $context);
 
 $obj1 = json_decode($json_data,true);
-
-   
      $_SESSION['id'] = $obj1['data']['id'];
      $_SESSION['name'] = $obj1['data']['name'];
      $_SESSION['email'] = $obj1['data']['email'];
      $_SESSION['lastname'] = $obj1['data']['lastname'];
      $_SESSION['username'] = $obj1['data']['username'];
      $_SESSION['city'] = $obj1['data']['city'];
-     $_SESSION['state'] = $obj1['data']['State'];
-     $_SESSION['country'] = $obj1['data']['County'];
+     $_SESSION['state'] = $obj1['data']['state'];
+     $_SESSION['country'] = $obj1['data']['country'];
      $_SESSION['postalcode'] = $obj1['data']['postalcode'];
      $_SESSION['address'] = $obj1['data']['address'];
      $_SESSION['phone'] = $obj1['data']['phone'];
      $_SESSION['insuretype'] = $obj1['data']['insuretype'];
-     $_SESSION['payement'] = $obj1['data']['payement'];
+     $_SESSION['payement'] = $obj1['data']['payment'];
      $_SESSION['image'] = $obj1['data']['profile'];
      $_SESSION['token'] = $obj['token'];
      

@@ -28,7 +28,8 @@ $obj = json_decode($resp,true);
 
 // $obj = json_decode($resp,true);
 if($obj['status']){
-echo "Logout Done";
+   session_destroy();
+   echo "Logout Done";
 echo "<script type='text/javascript'>window.location.replace('login.php');
 </script>";
 

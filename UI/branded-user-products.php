@@ -2,9 +2,6 @@
 <?php 
 session_start();
 
-$token="Bearer ".$_SESSION['token'];
-$usr_id=$_SESSION['id'];
-//echo $token;
 ?>
 <html lang="en">
 
@@ -165,7 +162,7 @@ a div {
 $msg="";
 // include_once 'constant.php';
 $baseurlapi="https://sofiapi.code7labs.com/api/";
-$url = $baseurlapi."product-by-user/".$usr_id;
+$url = $baseurlapi."product-by-user/".$_GET['id'];
 
 // Read JSON file
 

@@ -19,7 +19,6 @@ $pr_price=$_POST['i_price'];
 $fromdate=$_POST['from'];
 $todate=$_POST['to'];
 $to_date=str_replace('/', '-', $todate);
-echo $to_date . "<br>";
 $from_date1=str_replace(' ', '', $fromdate);
 $from_date = date("d-m-Y", strtotime($from_date1));  
 $to_date = date("d-m-Y", strtotime($todate));  

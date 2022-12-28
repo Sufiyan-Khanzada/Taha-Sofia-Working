@@ -1,7 +1,4 @@
 <!DOCTYPE html>
-<?php 
-
-?>
 <html lang="en">
 
 <head>
@@ -42,10 +39,46 @@ white-space: normal;
         </div>
 
     </div>
-    <!-- header end -->
 
-    <!-- reviews start -->
-    <div id="review">
+<?php
+ 
+
+$baseurlapi = "https://sofiapi.code7labs.com/api/";
+$url = $baseurlapi . "reviews-for-user/".$_GET['id'];
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, $url);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+$headers = array(
+   "Accept: application/json",
+   "Method:GET",
+   "Content-Type: application/json",
+
+   
+
+);
+curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+$resp = curl_exec($curl);
+
+$response_data_profile = json_decode($resp);
+
+if(isset($response_data_profile->data)){
+ if(!empty($response_data_profile->data)){
+
+ $user_data_profile = $response_data_profile->data;
+ }}
+else{
+ $user_data_profile='';
+}
+?>
+   <div id="review">
+        <?php
+        if($user_data_profile!=""){
+        foreach($user_data_profile as $userprofile){
+            
+              
+      
+        
+        ?>
         <!-- first review -->
         <div class="card mb-3 revcard" style="width:90%;">
             <div class="row g-0">
@@ -54,10 +87,72 @@ white-space: normal;
                 </div> -->
                 <div class="col-md-8">
                     <div class="card-body">
-                    <a href="#" style="text-decoration: none; color:#343a40"><h6 class="card-title">Valerie92</h6></a>
-                        <div class="card-text"><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i></div>
-                        <div class="card-text handle">Very nice contact, everything worked easy and fine.</div>
-                        <div class="card-text datlow">Dated: 01.05.2022</div>
+                    <a href="#" style="text-decoration: none; color:#343a40"><h6 class="card-title"><?php echo  $userprofile->users[0]->name; ?></h6></a>
+                        <div class="card-text">
+                            <?php
+                        
+                        $round=$userprofile->rating;
+                      
+                        if($round==1){
+                            ?>
+                             <i class="fa-solid fa-star"></i>
+                              <i class="fa fa-star-o" aria-hidden="true"></i>
+                               <i class="fa fa-star-o" aria-hidden="true"></i>     
+                                <i class="fa fa-star-o" aria-hidden="true"></i>     
+                                 <i class="fa fa-star-o" aria-hidden="true"></i>     
+                             
+                             <?php
+                        }
+
+                        else if($round==2){
+                            ?>
+                             <i class="fa-solid fa-star"></i>
+                              <i class="fa-solid fa-star"></i>
+                               <i class="fa fa-star-o" aria-hidden="true"></i>     
+                                <i class="fa fa-star-o" aria-hidden="true"></i>     
+                                 <i class="fa fa-star-o" aria-hidden="true"></i>     
+                             
+                             <?php
+                        }
+                        else if($round==3){
+                            ?>
+                             <i class="fa-solid fa-star"></i>
+                              <i class="fa-solid fa-star"></i>
+                              <i class="fa-solid fa-star"></i>
+                               <i class="fa fa-star-o" aria-hidden="true"></i>     
+                                <i class="fa fa-star-o" aria-hidden="true"></i>     
+                             
+                             <?php
+                        }
+                        
+                        else if($round==4){
+                            ?>
+                             <i class="fa-solid fa-star"></i>
+                              <i class="fa-solid fa-star"></i>
+                              <i class="fa-solid fa-star"></i>
+                               <i class="fa-solid fa-star"></i>
+                                <i class="fa fa-star-o" aria-hidden="true"></i>     
+                              
+                             
+                             <?php
+                        }
+                        
+                        else if(5){
+                            ?>
+                             <i class="fa-solid fa-star"></i>
+                              <i class="fa-solid fa-star"></i>
+                              <i class="fa-solid fa-star"></i>
+                               <i class="fa-solid fa-star"></i>
+                               <i class="fa-solid fa-star"></i>                          
+                              
+                             
+                             <?php
+                        }
+                        
+                      ?>
+                            </div>
+                        <div class="card-text handle"><?php echo  $userprofile->reviews; ?></div>
+                        <div class="card-text datlow">Dated: <?php echo  $userprofile->created_at; ?></div>
                         <div class="card-text revimg">
                         <a href="damage1.png" data-lightbox="models" data-title="Damage">
                         <img src="damage1.png" width="100%" height="45px">
@@ -76,87 +171,13 @@ white-space: normal;
             </div>
         </div>
 
-        <!-- second review -->
-        <div class="card mb-3 revcard" style="width:90%;">
-            <div class="row g-0">
-                
-                <div class="col-md-8">
-                    <div class="card-body">
-                    <a href="#" style="text-decoration: none; color:#343a40"><h6 class="card-title">Yvonne_2</h6></a>
-                        <div class="card-text"><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i></div>
-                        <div class="card-text handle">Everything was great, happy to rent from this user</div>
-                        <div class="card-text datlow">Dated: 13.04.2022</div>
-                        <!-- <div class="card-text revimg">
-                        <a href="damage1.png" data-lightbox="models" data-title="Damage">
-                        <img src="damage1.png" width="100%" height="45px">
-                        </a>
-                        <a href="damage2.png" data-lightbox="models" data-title="Damage">
-                        <img src="damage2.png" width="100%" height="45px">
-                        </a>
-                        <a href="damage3.png" data-lightbox="models" data-title="Damage">
-                        <img src="damage3.png" width="100%" height="45px">
-                        </a>
-                        </div> -->
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- third review -->
-        <div class="card mb-3 revcard" style="width:90%;">
-            <div class="row g-0">
-                
-                <div class="col-md-8">
-                    <div class="card-body">
-                    <a href="#" style="text-decoration: none; color:#343a40"><h6 class="card-title">Yvonne_2</h6></a>
-                        <div class="card-text"><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i></div>
-                        <div class="card-text handle">Everything was great, happy to rent from this user</div>
-                        <div class="card-text datlow">Dated: 13.04.2022</div>
-                        <div class="card-text revimg">
-                        <a href="damage1.png" data-lightbox="models" data-title="Damage">
-                        <img src="damage1.png" width="100%" height="45px">
-                        </a>
-                        <a href="damage2.png" data-lightbox="models" data-title="Damage">
-                        <img src="damage2.png" width="100%" height="45px">
-                        </a>
-                        <a href="damage3.png" data-lightbox="models" data-title="Damage">
-                        <img src="damage3.png" width="100%" height="45px">
-                        </a>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- fourth review -->
-        <div class="card mb-3 revcard" style="width:90%;">
-            <div class="row g-0">
-                
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <a href="#" style="text-decoration: none; color:#343a40"><h6 class="card-title">Valerie92</h6></a>
-                        <div class="card-text"><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i><i class="fa-solid fa-star favcol"></i></div>
-                        <div class="card-text handle">Very nice contact, everything worked easy and fine.</div>
-                        <div class="card-text datlow">Dated: 01.05.2022</div>
-                        <div class="card-text revimg">
-                        <a href="damage1.png" data-lightbox="models" data-title="Damage">
-                        <img src="damage1.png" width="100%" height="45px">
-                        </a>
-                        <a href="damage2.png" data-lightbox="models" data-title="Damage">
-                        <img src="damage2.png" width="100%" height="45px">
-                        </a>
-                        <a href="damage3.png" data-lightbox="models" data-title="Damage">
-                        <img src="damage3.png" width="100%" height="45px">
-                        </a>
-                        </div>
-
-
-                    </div>
-                </div>
-            </div>
-        </div>
+<?php 
+}
+}
+else{
+    echo "<p class='text-center'>No record found</p>";
+}
+?>
     </div>
     <!-- reviews end -->
 

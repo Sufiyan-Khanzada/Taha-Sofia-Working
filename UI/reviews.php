@@ -64,7 +64,7 @@ include 'show_review_profile.php';
                 </div> -->
                 <div class="col-md-8">
                     <div class="card-body">
-                    <a href="#" style="text-decoration: none; color:#343a40"><h6 class="card-title"><?php echo  $userprofile->user_id; ?></h6></a>
+                    <a href="#" style="text-decoration: none; color:#343a40"><h6 class="card-title"><?php echo  $userprofile->users[0]->name; ?></h6></a>
                         <div class="card-text">
                             <?php
                         
@@ -150,6 +150,9 @@ include 'show_review_profile.php';
 
 <?php 
 }
+}
+else{
+    echo "<p class='text-center'>No record found</p>";
 }
 ?>
         <!-- second review -->

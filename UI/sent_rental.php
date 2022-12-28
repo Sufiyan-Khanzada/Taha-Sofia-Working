@@ -1,6 +1,13 @@
 <?php
 
 session_start();
+if(isset($_SESSION['POST'])){
+    
+
+    $_POST= $_SESSION['POST'][0];
+    unset($_SESSION['POST']);
+    
+}
 ?>
 
 <!DOCTYPE html>
@@ -903,7 +910,7 @@ else
   showConfirmButton: false,
   timer: 1500
 },
-)
+)}
 
 
    

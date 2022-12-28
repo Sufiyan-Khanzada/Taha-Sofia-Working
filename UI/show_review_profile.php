@@ -9,27 +9,31 @@
 if($_SESSION['id']==null){
     header('location: index.php');
 
-}//print_r($_SESSION);
-$api_url_profile = "https://sofiapi.code7labs.com/api/reviews-for-user/".$_SESSION['id'];
+}
+$baseurlapi = "https://sofiapi.code7labs.com/api/";
+$url = $baseurlapi . "reviews-for-user/".$_SESSION['id'];
+$curl = curl_init();
+curl_setopt($curl, CURLOPT_URL, $url);
+curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+$headers = array(
+    "Accept: application/json",
+    "Method:GET",
+    "Content-Type: application/json",
 
-// echo $api_url;
+    
 
-$options_profile = array(
-  'http'=>array(
-    'method'=>"GET",
-    'header'=>"Accept-language: en\r\n" .
-              "Authorization:$token1"  // check function.stream-context-create on php.net
-               // i.e. An iPad 
-  )
 );
+curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+$resp = curl_exec($curl);
 
-$context_profile = stream_context_create($options_profile);
+$response_data_profile = json_decode($resp);
 
-$json_data_profile = file_get_contents($api_url_profile, false, $context_profile);
+if(isset($response_data_profile->data)){
+  if(!empty($response_data_profile->data)){
 
-$response_data_profile = json_decode($json_data_profile);
-
-$user_data_profile = $response_data_profile->data;
-
-
+  $user_data_profile = $response_data_profile->data;
+  }}
+else{
+  $user_data_profile='';
+}
 ?>

@@ -893,6 +893,26 @@ include 'count_fav.php';
                                     </div>
                                 </div> -->
 
+                                <?php
+                                if(isset($_SESSION['objmess'])){
+                                    $obj['message'] = $_SESSION['objmess'];
+                                echo '<div class="alert alert-danger">';
+                                
+                                $alert = $obj['message'];
+                                if(is_array($obj['message'])){
+                                $keys = array_keys($alert);
+                                    for($i = 0; $i < count($alert); $i++) {
+                                        foreach($alert[$keys[$i]] as $key => $value) {
+                                            echo $value . "<br>";
+                                        }
+                                    }}
+                                    else{
+                                        print_r($obj['message']);
+                                    
+                                    }
+                                    echo '</div>';
+                                    unset($_SESSION['objmess']);
+                                }?>
 
                             <div class="flex-w p-b-10" style="display: flex;justify-content:center">
                                 <!-- <div class="size-204 flex-w flex-m respon6-next">
@@ -916,8 +936,7 @@ include 'count_fav.php';
 						            <i class="icon-close-filter cl2 m-r-6 fs-15 trans-04 zmdi zmdi-close dis-none"></i>
                                     <a href="product-detail.php" style="text-decoration: none; padding:8px; ">€39.55/Day</a> 
 					            </div> -->
-                                
-
+                            
                                     <div id="btncheck">
                                     
                                         <button id="checkavail"  data-bs-toggle="modal" data-bs-target="#exampleModal" style="width:100%; height:48px; padding:15px; box-shadow: none; background-color:#fff; color: #888; border: 1px solid #e6e6e6;">
@@ -1460,7 +1479,7 @@ foreach($user_data113 as $user11333){
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-<form method="post" action="sent_rental.php" enctype="multipart/form-data">
+<form method="post" action="check-availability.php" enctype="multipart/form-data">
     
      <!--<input type="hidden" value="<?php //echo $user_data->featured_image; ?>" name="i_name"/>-->
   <input type="hidden" value="<?php echo "https://sofiapi.code7labs.com/UI/uploads/cats-graphic.jpg"?>" name="i_image"/>
@@ -1495,7 +1514,7 @@ foreach($user_data113 as $user11333){
       </div>
       <div class="modal-footer">
          <button type="button" class="btn btn-secondary" style="padding:0; box-shadow: none; width:47%; height:40px; margin-right:10px; background-color:#6c757d; color:white" data-bs-dismiss="modal">Close</button> 
-    <button type="submit" class="btn btn-primary" style="width:47%;height:40px; padding:0; box-shadow: none; color: white;text-decoration: none; color:#353535">Check</button>
+    <button type="submit"  class="btn btn-primary" style="width:47%;height:40px; padding:0; box-shadow: none; color: white;text-decoration: none; color:#353535">Check</button>
     
     </form>
       </div>

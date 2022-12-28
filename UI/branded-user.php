@@ -1,10 +1,8 @@
 <!DOCTYPE html>
 <?php 
 session_start();
+
 $id=$_GET['id'];
-$token=$_SESSION['token'];
-
-
 ?>
 <html lang="en">
 
@@ -67,41 +65,31 @@ $token=$_SESSION['token'];
      
         </style>
 </head>
-
 <?php
- 
- $aaa =32323;
-  $baserurl = 'https://sofiapi.code7labs.com/api/';
+    $baseurlapi = "https://sofiapi.code7labs.com/api/";
+    $url = $baseurlapi . "featured-user/".$id;
+    //https://sofiapi.code7labs.com/api/all-featured
+    $curl = curl_init();
+    curl_setopt($curl, CURLOPT_URL, $url);
+    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+    $headers = array(
+        "Accept: application/json",
+        "Method:GET",
+        "Content-Type: application/json",
 
-if($_GET['id']==null){
-    header('location: index.php');
+        
 
-}//print_r($_SESSION);
-$api_url = "https://sofiapi.code7labs.com/api/single_user/".$id;
+    );
+    curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+    $resp = curl_exec($curl);
 
-// echo $api_url;
+    $obj = json_decode($resp);
+    if (isset($obj->data)){
+    if (!empty($obj->data)) {
+        $user_data =$obj->data;
 
-$options = array(
-  'http'=>array(
-    'method'=>"GET",
-    'header'=>"Accept-language: en\r\n" .
-              "Cookie: foo=bar\r\n"  // check function.stream-context-create on php.net
-               // i.e. An iPad 
-  )
-);
-$context = stream_context_create($options);
-$json_data = file_get_contents($api_url, false, $context);
-
-$response_data = json_decode($json_data);
-
-$user_data = $response_data->data;
-
-
-
-
-?>
-
-
+    }}
+    ?>
 
 <body>
     <!-- header start -->
@@ -208,39 +196,11 @@ $user_data = $response_data->data;
                         </div>
                 
             </div>
-            <?php 
-                if($_SESSION['insuretype']=="My insurance doesn't cover rentals or I don't have an insurance"){
-?>
+ 
  <div class="idd" style="display:flex;justify-content:center;align-items:center">
             <span><i class="fa-sharp fa-solid fa-circle" style="color: red;"></i> </span>&nbsp; <span> <?php  echo $user_data->insuretype; ?> </span>
         </div>
 
-<?php 
-                }
-
-
-
-              else if($_SESSION['insuretype']=="My insurance covers rentals"){
-?>
- <div class="idd" style="display:flex;justify-content:center;align-items:center">
-            <span><i class="fa-sharp fa-solid fa-circle" style="color: green;"></i> </span>&nbsp; <span> <?php echo $_SESSION['insuretype']; ?> </span>
-        </div>
-
-<?php 
-                }
-
-
-             else if($_SESSION['insuretype']=="I have an insurance and don't know whether it covers rentals"){
-?>
- <div class="idd" style="display:flex;justify-content:center;align-items:center">
-            <span><i class="fa-sharp fa-solid fa-circle" style="color: yellow;"></i> </span>&nbsp; <span> <?php echo $_SESSION['insuretype']; ?> </span>
-        </div>
-
-<?php 
-                }    
-
-
-            ?>
                        <!-- <div id="rat1" style="display:flex;justify-content:center">
             <span>(5.00/5)</span></div> -->
             <div class="d-flex flex-row justify-content-center align-items-center mt-1 inst1"><i class="fa-brands fa-instagram fa-1x"></i></div>
@@ -264,8 +224,8 @@ $user_data = $response_data->data;
     <ul class="list-group" style="margin-top: 20px;">
         
        
-        <a href="branded-user-products.php" class="ancacc"><li class="list-group-item "> Products <span style="float: right;"><i class="fa fa-angle-right"></i></span></li></a>
-        <a href="branded-user-reviews.php" class="ancacc"><li class="list-group-item ">Reviews <span style="float: right;"><i class="fa fa-angle-right"></i></span></li></a>
+        <a href="branded-user-products.php?id=<?php  echo $user_data->id; ?>" class="ancacc"><li class="list-group-item "> Products <span style="float: right;"><i class="fa fa-angle-right"></i></span></li></a>
+        <a href="branded-user-reviews.php?id=<?php  echo $user_data->id; ?>" class="ancacc"><li class="list-group-item ">Reviews <span style="float: right;"><i class="fa fa-angle-right"></i></span></li></a>
         <!-- <a href="update.php" class="ancacc"><li class="list-group-item ">Update Profile</li></a> -->
       </ul>
 
