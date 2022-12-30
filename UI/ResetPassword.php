@@ -311,17 +311,30 @@
             <div style="width:90%;margin: auto;">
                 <div class="input-container1">
                     <!-- <div style="width:100%;display: flex;justify-content:center;align-items:center;height: 100%;background: #0275d8;"><i class="fa fa-key icon"></i></div> -->
-                    <input type="text" class="typecol" placeholder="Password" height="100%"  autocomplete="off" style="margin-top:0px;margin-bottom:0px; width:100%;">
-                    <div style="width:100%;display: flex;justify-content:center;align-items:center;height: 100%;"><i class="fa-solid fa-eye"></i></div>
+                    <input type="text" class="typecol" id="password-field2" placeholder="Password" height="100%"  autocomplete="off" style="margin-top:0px;margin-bottom:0px; width:100%;">
+                    <div style="width:100%;display: flex;justify-content:center;align-items:center;height: 100%;"><i toggle="#password-field2" class="toggle-password fa-solid fa-eye"></i></div>
 
                 </div>
 
                 <div class="input-container1">
                     <!-- <div style="width:100%;display: flex;justify-content:center;align-items:center;height: 100%;background: #0275d8;"><i class="fa fa-key icon"></i></div> -->
-                    <input type="text" class="typecol" placeholder="Confirm Password" height="100%"  autocomplete="off" style="margin-top:0px;margin-bottom:0px; width:100%;">
-                    <div style="width:100%;display: flex;justify-content:center;align-items:center;height: 100%;"><i class="fa-solid fa-eye"></i></div>
+                    <input type="text" class="typecol" id="password-field" placeholder="Confirm Password" height="100%"  autocomplete="off" style="margin-top:0px;margin-bottom:0px; width:100%;">
+                    <div style="width:100%;display: flex;justify-content:center;align-items:center;height: 100%;"><i toggle="#password-field" class="toggle-password fa-solid fa-eye"></i></div>
 
                 </div>
+                <script>
+    $(".toggle-password").click(function() {
+
+$(this).toggleClass("fa-eye fa-eye-slash");
+var input = $($(this).attr("toggle"));
+if (input.attr("type") == "password") {
+  input.attr("type", "text");
+} else {
+  input.attr("type", "password");
+}
+});
+</script>
+
 
                 <div style="margin-top:15px;width:100%;display: flex;justify-content:center;align-items:center;height: 100%;">
                     <button id="btn1log"><a href="update.php" style="text-decoration:none;color:white;font-size:17px">Confirm Password</a></button>

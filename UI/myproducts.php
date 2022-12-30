@@ -19,6 +19,7 @@ $usr_id=$_SESSION['id'];
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
     <script src="https://kit.fontawesome.com/7a4aae7e35.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/7a4aae7e35.js" crossorigin="anonymous"></script>
+     <link rel="stylesheet" type="text/css" href="vendor/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="style.css">
     <style>
         p{
@@ -158,7 +159,19 @@ a div {
   max-height: 100vh;
   transition: opacity 0.2s, z-index 0.2s, max-height 0.2s;
 }
-</style>
+ i.fa.fa-calendar.glyphicon.glyphicon-calendar {
+            top: 15px;
+        }
+
+        .daterangepicker_input input {
+            padding-left: 25px !important;
+        }
+
+        .table-condensed td,
+        .table-condensed th {
+            padding: 0 !important;
+        }
+    </style>
 </head>
 <body>
 <?php
@@ -214,6 +227,8 @@ foreach ($user_data as $user) {
 // print_r($offer);
 // echo "ssadsasd";
 // echo count($offerchunk);
+
+
 ?>
 
     <!-- header start -->
@@ -230,32 +245,50 @@ foreach ($user_data as $user) {
     </div>
     <!-- header end -->
 
+    <?php if(isset($_SESSION['response']))
+      {?>
+    <div class="alert alert-danger">
+   <?php
+$obj=$_SESSION['response'];
+   print_r($obj->message);
+   unset($_SESSION['response']);
+
+   
+   //?>
+
+
+</div>
+
+<?php 
+      }?>
 
 
     <div id="fav1">
-<?php 
+      
+      <?php
 
 foreach ($user_data as $user) {
-
   
   ?>
         <div  class="img-wish" style="margin: 6px;">
         
 
-        <!-- <a href="product-detail.php"> -->
+                        
           <div class="card" style="width: 100%; border:none;">
-                                <img class="img-fluid" alt="100%x280px" src="product1.jpg" style="width: 100%;">
-                              
+              
+         <a href='product-detail.php?id=<?php echo $user->id; ?>'>
+                                <img class="img-fluid" alt="100%x280px" src="<?php echo $user->featured_image; ?>" style="width: 100%;">
+                              </a>
                                      <div class="dropdown-container" tabindex="-1"  style="position: absolute; left:85%; top:2%">
                                        <div class="three-dots"></div>
                                        <div class="dropdown">
                                          <a href="editproduct.php?id=<?php echo $user->id; ?>"><div>Edit</div></a>
-                                         <a href="#" data-toggle="modal" data-target="#exampleModal"><div>Pause</div></a>
+                                         <a href="#" data-toggle="modal" data-target="#pauseModal"><div>Pause</div></a>
                                          <a href="delete_product.php?id=<?php echo $user->id; ?>" ><div>Delete</div></a>
                                        </div>
                                      </div>
                                     
-
+        
                                     
 
                                 <div class="card-body" style="padding: 8px;">
@@ -266,7 +299,7 @@ foreach ($user_data as $user) {
 
                                  
                                 <center>
-                                 <a href="#" class="btn btn-primary bor4">€ <?php echo $user->Item_price."/Perday"; ?></a>
+                                 <a href='product-detail.php?id=<?php echo $user->id; ?>' class="btn btn-primary bor4">€ <?php echo $user->Item_price."/Perday"; ?></a>
                                   </center>
                                 </div>
                               </div></a>
@@ -284,15 +317,13 @@ foreach ($user_data as $user) {
 
 
 </div>
-<?php
-}?>
 
 
 
 </div>
 
 <!-- Modal Date -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+<div class="modal fade" id="pauseModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -301,26 +332,49 @@ foreach ($user_data as $user) {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">
-      <input type="text" name="daterange" value="01/01/2018 - 01/15/2018" / style="width: 100%;">
-        <script>
-        $(function() {
-          $('input[name="daterange"]').daterangepicker({
-            opens: 'left'
-          }, function(start, end, label) {
-            console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-          });
-        });
-        </script>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" style="background-color: white; color:#888; margin-left:10px"> Submite</button>
-      </div>
+     <div class="modal-body">
+                    <form method="post" action="pause.php" >
+
+                   
+                        <input type="hidden" value="<?php echo $user->id; ?>" name="p_id" />
+                       
+
+                        <input type="text" name="daterange" />
+                        <script>
+                            $(function() {
+                                $('input[name="daterange"]').daterangepicker({
+                                    "autoapply": true,
+                                    "startDate": moment(),
+                                    "endDate": moment().add(5, 'days'),
+    
+                                });
+                                $('.drp-calendar.right').hide();
+                                $('.drp-calendar.left').addClass('single');
+
+                                $('.calendar-table').on('DOMSubtreeModified', function() {
+                                    var el = $(".prev.available").parent().children().last();
+                                    if (el.hasClass('next available')) {
+                                        return;
+                                    }
+                                    el.addClass('next available');
+                                    el.append('<span></span>');
+                                });
+                            });
+                        </script>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" style="padding:0; box-shadow: none; width:47%; height:40px; margin-right:10px; background-color:#6c757d; color:white" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" style="width:47%;height:40px; padding:0; box-shadow: none; color: white;text-decoration: none; color:#353535">Submit</button>
+
+                    </form>
+                </div>
     </div>
   </div>
 </div>
 
+<?php
+
+}?>
 
 <!-- Modal Delete -->
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -348,7 +402,7 @@ foreach ($user_data as $user) {
 
     <div class="moreproducts1">
 
-<a href="product.php"><button class="button1 button3 ">Upload More Products</button></a>
+<a href="productupload.php"><button class="button1 button3 ">Upload More Products</button></a>
     
 </div>
 
@@ -367,17 +421,7 @@ foreach ($user_data as $user) {
       </div>
       <div class="modal-body">
       
-<input type="text" name="daterange" value="01/01/2018 - 01/15/2018" />
 
-<script>
-$(function() {
-  $('input[name="daterange"]').daterangepicker({
-    opens: 'left'
-  }, function(start, end, label) {
-    console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
-  });
-});
-</script>
 
       </div>
       <div class="modal-footer">
@@ -493,7 +537,10 @@ document.addEventListener("click", closeAllSelect);
 
 
     <!-- dropdown end -->
-
+<script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+   
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>

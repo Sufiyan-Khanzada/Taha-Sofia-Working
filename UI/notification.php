@@ -16,6 +16,24 @@ session_start();
     <script src="https://kit.fontawesome.com/7a4aae7e35.js" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+<?php
+$token="Bearer ".$_SESSION['token']; 
+  $baseurlapi="https://sofiapi.code7labs.com/api/";
+$unreadNotification_url = $baseurlapi."get-unread-notification/".$_SESSION['id'];
+  $curl = curl_init();
+  curl_setopt($curl, CURLOPT_URL, $unreadNotification_url);
+  curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+  
+  
+$headers = array(
+   "Accept: application/json",
+   "Content-Type: application/json",
+    "Authorization: ".$token.""
+);
+  curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+  $json_data_unreadNotification = curl_exec($curl);
+  $response_data_unreadNotification =json_decode($json_data_unreadNotification);
+ ?>
 
 <body>
 
@@ -28,31 +46,71 @@ session_start();
         <div id="profile_heading">
             <div id="profheadrev">Notification</div>
         </div>
-        <div class="iconprofileheader">
-        <a href="update.php" style="color:black"><i class="fa-solid fa-gear fa-2x"></i></a>
-        </div>
-
+        
     </div>
     <!-- header end -->
+<?php
+if(isset($response_data_unreadNotification->success)){
+    foreach ($response_data_unreadNotification->data as $data){
+        if(str_contains($data->data, "wants to rent your product")){
+    echo ' <form  method="post" action="rental_details.php" id="'.$data->id.'" style="text-decoration: none;color: black;" enctype="multipart/form-data">
+    <input type="hidden" value="'.$data->products[0]->id .'" name="pId"/>
+    <input type="hidden" value="'.$data->products[0]->Item_name .'" name="Item_name"/>
+    <input type="hidden" value="'.$data->products[0]->Item_image .'" name="Item_image"/>
+    <input type="hidden" value="'.$data->products[0]->category_id .'" name="category_id"/>
+    <input type="hidden" value="'.$data->products[0]->brand_id .'" name="brand_id"/>
+    <input type="hidden" value="'.$data->products[0]->rental_price_week .'" name="rental_price_week"/>
+    <input type="hidden" value="'.$data->products[0]->rental_price_oneday .'" name="rental_price_oneday"/>
+    <input type="hidden" value="'.$data->rented[0]->id .'" name="rId"/>
+    <input type="hidden" value="'.$data->rented[0]->to .'" name="to"/>
+    <input type="hidden" value="'.$data->rented[0]->from .'" name="from"/>
+    <input type="hidden" value="'.$data->rented[0]->price .'" name="price"/>
+    <input type="hidden" value="'.$data->rented[0]->shipment_address .'" name="shipment_address"/>
+    <div onClick="document.getElementById(\''.$data->id.'\').submit();" class="notify" style="background-color:#f1f1f1 ;">
+    <div class="notifyimg" style="background-image:url('.$data->products[0]->Item_image.'); background-size: contain;"></div>
+    <div class="notifypara1">
+    <div class="notifypara2">
+    <i class="fa-solid fa-xmark"></i>
+    </div>
+    <div class="notifypara">
+        <div>
+            <span style="font-weight: bolder;">'. strstr ( $data->data , ' ' , true) .'</span> 
+            <p class= "stext-102 c16">'. strstr ( $data->data , ' ' ) .'</p>
+        </div>
+    </div>
+    
+    </div>
+</div>
+</form>
+';
 
-    <!-- content start -->
-    <a href="rental_details.php" style="text-decoration: none;color: black;">
-        <div class="notify" style="background-color:#f1f1f1 ;">
-            <div class="notifyimg"></div>
-            <div class="notifypara1">
-            <div class="notifypara2">
-            <i class="fa-solid fa-xmark"></i>
-            </div>
-            <div class="notifypara">
-                <div>
-                    <span style="font-weight: bolder;">Valerie92</span> 
-                    <p class"stext-102 c16"> wants to rent your product "Louis".Review the details and accept or reject the request</p>
-                </div>
-            </div>
-            
+    }
+    if(str_contains($data->data, "waiting for vendor for approval.")){
+        $title=$data->data;
+        echo ' <div id="'.$data->id.'" style="text-decoration: none;color: black;" >
+        <div  class="notify" style="background-color:#f1f1f1 ;">
+        <div class="notifyimg" style="background-image:url('.$data->products[0]->Item_image.'); background-size: contain;"></div>
+        <div class="notifypara1">
+        <div class="notifypara2">
+        <i class="fa-solid fa-xmark"></i>
+        </div>
+        <div class="notifypara">
+            <div>
+                <span style="font-weight: bolder;">'. strstr ( $title , ':',true ).'</span> 
+                <p class= "stext-102 c16">'. explode(':', $title, 2)[1]  .'</p>
             </div>
         </div>
-    </a>
+        
+        </div>
+    </div>
+    </div>
+    ';
+    
+        }}
+
+}
+?>
+    <!-- content start -->
     <!-- second -->
     <a href="rental_details.php" style="text-decoration: none;color: black;">
         <div class="notify">

@@ -485,9 +485,20 @@ curl_close($curl);
 
                 <div class="input-container1">
                     <!-- <div style="width:100%;display: flex;justify-content:center;align-items:center;height: 100%;background: #0275d8;"><i class="fa fa-key icon"></i></div> -->
-                    <input type="password" class="typecol" placeholder="Password" height="100%"  autocomplete="off" name="password" style="margin-top:0px;margin-bottom:0px; width:100%;">
-                    <div style="width:100%;display: flex;justify-content:center;align-items:center;height: 100%;"><i class="fa-solid fa-eye"></i></div>
+                    <input type="password" id="password-field" class="typecol" placeholder="Password" height="100%"  autocomplete="off" name="password" style="margin-top:0px;margin-bottom:0px; width:100%;">
+                    <div style="width:100%;display: flex;justify-content:center;align-items:center;height: 100%;"><i toggle="#password-field" class="fa-solid fa-eye toggle-password"></i></div>
+<script>
+    $(".toggle-password").click(function() {
 
+$(this).toggleClass("fa-eye fa-eye-slash");
+var input = $($(this).attr("toggle"));
+if (input.attr("type") == "password") {
+  input.attr("type", "text");
+} else {
+  input.attr("type", "password");
+}
+});
+</script>
                 </div>
                 <div style="margin-bottom: 8px;margin-top:5px;display:flex;justify-content:flex-end;">
                     <a href="send-email.php" style="font-size:13px; color:#0275d8">Forgot Password?</a>

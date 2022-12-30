@@ -1,5 +1,7 @@
 <?php
 session_start();
+$data= $_POST;
+extract($_POST, EXTR_SKIP);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -126,19 +128,16 @@ $user_data = $response_data->data;
         <div id="profile_heading">
             <div id="profheadrev">Rental Details</div>
         </div>
-        <div class="iconprofileheader">
-      
-        <a href="update.php" style="color:black"><i class="fa-solid fa-gear fa-2x"></i></a>
         
-        </div>
     </div>
     <!-- header end -->
 
     <!-- request sent start -->
     <div id="request_start_rental">
-        <div class="date_rental">
-            05 JUL - 07 JUL 2022
-        </div>
+        <div class="date_rental" style="text-transform:uppercase;">
+        <?php  
+    echo date("d M", strtotime($to)). " - ".date("d M Y", strtotime($from));;  
+?></div>
         <div id="req_btn">
             <div class="bigfont">Request Sent</div>
         </div>
@@ -147,10 +146,10 @@ $user_data = $response_data->data;
 
     <!-- profile start -->
     <div id="profile_rental" style="margin-top: 10px;">
-        <div id="imgprogrental"></div>
+        <div id="imgprogrental" <?php echo 'style="background-image:url('.$Item_image.'); background-size: contain;"';?>></div>
         <div id="contentprogrental">
-            <div class="low1 low2">Loewe</div>
-            <div class="low1">Dress, UK 6</div>
+            <div class="low1 low2"><?php echo $Item_name;?></div>
+            <div class="low1"><?php echo $category_id.', '.$brand_id;?> </div>
         </div>
     </div>
     <!--  profile end-->
@@ -159,7 +158,9 @@ $user_data = $response_data->data;
     <div id="calrental">
         <div class="disflex" style="width:50%;"><i class="fa-solid far fa-calendar fa-2x"></i></div>
         <div class="disflex1">
-            <div class="date_rental" style="margin-left: -30px; color:black;">05 JUL - 07 JUL 2022</div>
+            <div class="date_rental" style="margin-left: -30px; color:black;text-transform:uppercase;">  <?php  
+    echo date("d M", strtotime($to)). " - ".date("d M Y", strtotime($from));;  
+?></div>
         </div>
     </div>
     <!-- calender end -->
@@ -247,7 +248,7 @@ $user_data = $response_data->data;
     <!-- delivery INFO START -->
     <div class="del1" style="margin-top: 40px; padding-bottom:10px; border-bottom: 1px solid #c6c3e391;">DELIVERY INFO</div>
     <div id="btndelinfo" style="margin-top: 20px;">
-        <div id="reject" class="bigfont">
+        <div id="reject" class="bigfont">Reject
             
         </div>
         <div id="accept" class="bigfont">

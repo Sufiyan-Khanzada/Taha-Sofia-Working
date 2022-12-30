@@ -125,16 +125,29 @@ curl_close($curl);
         <input type="email" class="typecol" name="email" placeholder="Email Address" style="width: 100%;">
         <div class="input-container1">
             <!-- <div style="width:100%;display: flex;justify-content:center;align-items:center;height: 100%;background: #0275d8;"><i class="fa fa-key icon"></i></div> -->
-            <input type="password" class="typecol" placeholder="Password" name="password" height="100%" autocomplete="off" style="margin-top:0px;margin-bottom:0px; width: 100%;">
-            <div style="width:100%;display:flex;justify-content:center;align-items:center;height: 100%;"><i class="fa-solid fa-eye"></i></div>
+            <input type="password" id="password-field2" class="typecol" placeholder="Password" name="password" height="100%" autocomplete="off" style="margin-top:0px;margin-bottom:0px; width: 100%;">
+            <div style="width:100%;display:flex;justify-content:center;align-items:center;height: 100%;"><i toggle="#password-field2" class="toggle-password fa-solid fa-eye"></i></div>
 
         </div>
         <div class="input-container1">
             <!-- <div style="width:100%;display: flex;justify-content:center;align-items:center;height: 100%;background: #0275d8;"><i class="fa fa-key icon"></i></div> -->
-            <input type="password" class="typecol" placeholder="Confirm Password"  name="confirm_password" height="100%" autocomplete="off" style="margin-top:0px;margin-bottom:0px; width: 100%;">
-            <div style="width:100%;display:flex;justify-content:center;align-items:center;height: 100%;"><i class="fa-solid fa-eye"></i></div>
+            <input type="password" id="password-field" class="typecol" placeholder="Confirm Password"  name="confirm_password" height="100%" autocomplete="off" style="margin-top:0px;margin-bottom:0px; width: 100%;">
+            <div style="width:100%;display:flex;justify-content:center;align-items:center;height: 100%;"><i toggle="#password-field" class="toggle-password fa-solid fa-eye"></i></div>
 
         </div>
+        <script>
+    $(".toggle-password").click(function() {
+
+$(this).toggleClass("fa-eye fa-eye-slash");
+var input = $($(this).attr("toggle"));
+if (input.attr("type") == "password") {
+  input.attr("type", "text");
+} else {
+  input.attr("type", "password");
+}
+});
+</script>
+
 
         <div class="mb-3 form-check jusflex">
             <input type="checkbox" class="form-check-input" id="exampleCheck1" name="privacy" required>
