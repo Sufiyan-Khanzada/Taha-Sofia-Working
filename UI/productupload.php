@@ -238,7 +238,8 @@
     padding: 40px 0;
   }
 
-  .upload__inputfile , .feature_inputfile {
+  .upload__inputfile,
+  .feature_inputfile {
     width: 0.1px;
     height: 0.1px;
     opacity: 0;
@@ -283,20 +284,25 @@
     margin-bottom: 10px;
   }
 
-  .upload__img-wrap, .feature_img-wrap {
+  .upload__img-wrap,
+  .feature_img-wrap {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     align-items: center;
   }
 
-  .upload__img-box , .upload__img-box1 {
+  .upload__img-box,
+  .upload__img-box2,
+  .upload__img-box1 {
     width: 80px;
     padding: 0 5px;
     margin-bottom: 12px;
   }
 
-  .upload__img-close , .upload__img-close1 {
+  .upload__img-close,
+  .upload__img-close2,
+  .upload__img-close1 {
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -312,7 +318,9 @@
     cursor: pointer;
   }
 
-  .upload__img-close:after , .upload__img-close1:after {
+  .upload__img-close:after,
+  .upload__img-close2:after,
+  .upload__img-close1:after {
     content: "✖";
     font-size: 10px;
     color: white;
@@ -565,7 +573,7 @@ DATA;
                 <!-- fieldsets -->
                 <fieldset>
                   <div class="form-card" style="box-shadow: none; overflow: hidden; overflow-y: scroll;">
-                  <h6 class="text-center">Upload Your Feature Image</h6>
+                    <h6 class="text-center">Upload Your Feature Image</h6>
                     <div class="upload__box">
                       <div class="upload__btn-box">
                         <div style="display: flex;justify-content:center">
@@ -589,11 +597,11 @@ DATA;
                       </div>
                       <div class="upload__img-wrap"></div>
                     </div>
-                    
+
                   </div>
-                  <small id="imgcheckalert" class="form-text alert alert-danger">Please insert The Images</small>
-                  <input type="button" disabled name="next" id="imgcheck" class="btn next action-button btnnext" value="Continue" />
-                  </fieldset>
+                  <small id="imgcheckalert" class="form-text alert alert-danger" style="display:none;">Please insert The Images</small>
+                  <input type="button" name="next" id="imgcheck" class="btn action-button btnnext" value="Continue" />
+                </fieldset>
 
                 <fieldset>
 
@@ -627,7 +635,7 @@ DATA;
                       <div class="input-group-prepend">
                         <span class="input-group-text">€</span>
                       </div>
-                      <input type="text" placeholder="Original Rental Price" name="item_price" class="form-control numberonly" aria-label="Amount (to the nearest dollar)" style="width: 70%;" id="ac_price"  onchange="">
+                      <input type="text" placeholder="Original Rental Price" name="item_price" class="form-control numberonly" aria-label="Amount (to the nearest dollar)" style="width: 70%;" id="ac_price" onchange="">
                       <div class="input-group-append">
                         <span class="input-group-text" data-toggle="modal" data-target="#exampleModalCenter"><i class="fa fa-info-circle" style="color:#b6b6b6;"></i></span>
                       </div>
@@ -696,18 +704,17 @@ DATA;
                     <!-- <input type="text" name="phno" placeholder="Category" /> -->
                     <div class="size-204 mt-3 mb-3">
                       <div class="rs1-select2 bor8 bg0">
-                       <label>Category</label>
-                        <select class="form-control select2" name="cat">
-                          <option>Select</option>
+                        <label>Category</label>
+                        <select class="form-control select2" id="main">
+                          <option></option>
                           <?php
-                          foreach ($user_data_cat as $user_cat) {
-                          ?>
-                            <option value="<?php echo $user_cat->id; ?>"><?php echo $user_cat->name; ?></option>
-
-                          <?php
-
+                          foreach ($user_data_cat as $main) {
+                            echo "<option value=" . $main->id . ">" . $main->name . "</option>";
                           }
                           ?>
+
+
+                          <option></option>
                         </select>
 
 
@@ -724,17 +731,8 @@ DATA;
                     <div class="size-204 mt-3 mb-3">
                       <div class="rs1-select2 bor8 bg0">
                         <label>SubCategory</label>
-                        <select class="form-control select2" name="su_cat">
+                        <select class="form-control select2" name="su_cat" id="child">
 
-                          <option>Select</option>
-                          <?php
-                          foreach ($user_data_cat_child_child as $user_cat_child1) {
-                          ?>
-                            <option value="<?php echo $user_cat_child1->id; ?>"><?php echo $user_cat_child1->name; ?></option>
-
-                          <?php
-
-                          } ?>
                         </select>
                         <div class="dropDownSelect2"></div>
                       </div>
@@ -742,19 +740,44 @@ DATA;
                     <div class="size-204">
                       <label>Sub Category 2</label>
                       <div class="rs1-select2 bor8 bg0">
-                        <select class="form-control select2" name="size">
-                          <option>Select</option>
-                          <option>Car</option>
-                          <option>Bike</option>
-                          <option>Scooter</option>
-                          <option>Cycle</option>
-                          <option>Horse</option>
+                        <select class="form-control select2" name="size" id="Subchild">
 
 
                         </select>
                         <div class="dropDownSelect2"></div>
                       </div>
                     </div>
+                    <script>
+                      var childCat = JSON.parse(<?php echo json_encode($json_data_cat_child); ?>).data;
+                      var main = $('#main');
+                      var child = $('#child');
+                      var Subchild = $('#Subchild');
+
+                      main.on("change", function() {
+                        var main = $('#main');
+
+                        child.find('option').remove().end().append('<option value=""></option>').val('');
+                        Subchild.find('option').remove().end().append('<option value=""></option>').val('');
+                        parentChildCat(main, child);
+                      });
+                      $("#child").on("change", function() {
+                        Subchild.find('option').remove().end().append('<option value=""></option>').val('');
+                        parentChildCat(child, Subchild);
+                      });
+
+                      function parentChildCat(cat, subcat) {
+                        catVal = cat.val();
+                        var filtering = childCat.filter(filter => filter.child_of === catVal);
+                        $.each(filtering, function(i, item) {
+                          subcat.append($('<option>', {
+                            value: item.id,
+                            text: item.name
+                          }));
+                        });
+
+                      }
+                    </script>
+
                     <!-- <input type="text" name="lname" placeholder="Color" /> -->
                     <div class="size-204 mt-3 mb-3">
                       <div class="rs1-select2 bor8 bg0">
@@ -805,6 +828,8 @@ DATA;
                       </div>
 
                     </div>
+
+
                     <textarea class="size-110 bor8 stext-102 cl2 p-lr-20 p-tb-10 " placeholder="Discription" id="review" name="description" style="border: 1px solid #ccc;"></textarea>
                     <h2 style="font-size: 15px; margin-bottom:10px;">Tags Input</h2>
 
@@ -813,9 +838,9 @@ DATA;
 
 
                   </div>
-                  <small id="checkalert_2" class="form-text alert alert-danger">Please Fill The Details</small>
-                   <input type="button" name="previous" class="previous action-button-previous" value="Back" />
-                  <input type="button" name="next" id="check2"class="next action-button btnnext" value="Continue" />
+                  <small id="checkalert_2" class="form-text alert alert-danger" style="display: none;">Please Fill The Details</small>
+                  <input type="button" name="previous" class="previous action-button-previous" value="Back" />
+                  <input type="button" name="next" id="check2" class=" action-button btnnext" value="Continue" />
                 </fieldset>
                 <fieldset>
                   <div class="form-card" style="box-shadow: none; overflow: hidden; overflow-y: scroll;">
@@ -1031,82 +1056,78 @@ DATA;
   </script>
 
   <script>
-    $(document).ready(function() {
+    var current_fs, next_fs, previous_fs; //fieldsets
+    var opacity;
 
-      var current_fs, next_fs, previous_fs; //fieldsets
-      var opacity;
+    $(".next").click(function() {
 
-      $(".next").click(function() {
+      current_fs = $(this).parent();
+      next_fs = $(this).parent().next();
 
-        current_fs = $(this).parent();
-        next_fs = $(this).parent().next();
+      //Add Class Active
+      $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
 
-        //Add Class Active
-        $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+      //show the next fieldset
+      next_fs.show();
+      //hide the current fieldset with style
+      current_fs.animate({
+        opacity: 0
+      }, {
+        step: function(now) {
+          // for making fielset appear animation
+          opacity = 1 - now;
 
-        //show the next fieldset
-        next_fs.show();
-        //hide the current fieldset with style
-        current_fs.animate({
-          opacity: 0
-        }, {
-          step: function(now) {
-            // for making fielset appear animation
-            opacity = 1 - now;
-
-            current_fs.css({
-              'display': 'none',
-              'position': 'relative'
-            });
-            next_fs.css({
-              'opacity': opacity
-            });
-          },
-          duration: 600
-        });
+          current_fs.css({
+            'display': 'none',
+            'position': 'relative'
+          });
+          next_fs.css({
+            'opacity': opacity
+          });
+        },
+        duration: 600
       });
-
-      $(".previous").click(function() {
-
-        current_fs = $(this).parent();
-        previous_fs = $(this).parent().prev();
-
-        //Remove class active
-        $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
-
-        //show the previous fieldset
-        previous_fs.show();
-
-        //hide the current fieldset with style
-        current_fs.animate({
-          opacity: 0
-        }, {
-          step: function(now) {
-            // for making fielset appear animation
-            opacity = 1 - now;
-
-            current_fs.css({
-              'display': 'none',
-              'position': 'relative'
-            });
-            previous_fs.css({
-              'opacity': opacity
-            });
-          },
-          duration: 600
-        });
-      });
-
-      $('.radio-group .radio').click(function() {
-        $(this).parent().find('.radio').removeClass('selected');
-        $(this).addClass('selected');
-      });
-
-      $(".submit").click(function() {
-        return false;
-      })
-
     });
+
+    $(".previous").click(function() {
+
+      current_fs = $(this).parent();
+      previous_fs = $(this).parent().prev();
+
+      //Remove class active
+      $("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+
+      //show the previous fieldset
+      previous_fs.show();
+
+      //hide the current fieldset with style
+      current_fs.animate({
+        opacity: 0
+      }, {
+        step: function(now) {
+          // for making fielset appear animation
+          opacity = 1 - now;
+
+          current_fs.css({
+            'display': 'none',
+            'position': 'relative'
+          });
+          previous_fs.css({
+            'opacity': opacity
+          });
+        },
+        duration: 600
+      });
+    });
+
+    $('.radio-group .radio').click(function() {
+      $(this).parent().find('.radio').removeClass('selected');
+      $(this).addClass('selected');
+    });
+
+    $(".submit").click(function() {
+      return false;
+    })
   </script>
   <script src="vendor/select2/select2.min.js"></script>
   <script>
@@ -1410,7 +1431,124 @@ function readImage() {
   <script>
     jQuery(document).ready(function() {
       ImgUpload();
+
     });
+    $('#check2').on('click', function() {
+      item_name = $('input[name="item_name"]').val();
+      brand = $('select[name="brand"]').val();
+      type = $('input[name="type"]').val();
+      item_price = $('input[name="item_price"]').val();
+      priceoneday = $('input[name="priceoneday"]').val();
+      pricesevenday = $('input[name="pricesevenday"]').val();
+      mindays = $('input[name="mindays"]').val();
+      maxdays = $('input[name="maxdays"]').val();
+      cat = $('select[name="cat"]').val();
+      su_cat = $('select[name="su_cat"]').val();
+      size = $('select[name="size"]').val();
+      item_condition = $('select[name="item_condition"]').val();
+      description = $('textarea[name="description"]').val();
+      tags = $('input[name="tags"]').val();
+      selectvalue = '';
+      
+      if ((item_name != '') && (brand != selectvalue) && (type != '') && (item_price != '') && (priceoneday != '') && (pricesevenday != '') && (mindays != '') && (maxdays != '') && (cat != selectvalue) && (su_cat != selectvalue) && (size != selectvalue) && (item_condition != selectvalue) && (description != '') && (tags != '')) {
+        
+
+        $('#check2').removeAttr('disabled');
+        $('#checkalert_2').hide();
+        var current_fs, next_fs, previous_fs; //fieldsets
+        var opacity;
+
+        $('#check2').click(function() {
+
+          current_fs = $(this).parent();
+          next_fs = $(this).parent().next();
+
+          //Add Class Active
+          $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+          //show the next fieldset
+          next_fs.show();
+          //hide the current fieldset with style
+          current_fs.animate({
+            opacity: 0
+          }, {
+            step: function(now) {
+              // for making fielset appear animation
+              opacity = 1 - now;
+
+              current_fs.css({
+                'display': 'none',
+                'position': 'relative'
+              });
+              next_fs.css({
+                'opacity': opacity
+              });
+            },
+            duration: 600
+          });
+        });
+
+      } else {
+        $('#check2').attr('disabled');
+        $('#checkalert_2').show();
+      
+      }
+
+    });
+
+
+
+    $('#imgcheck').on('click', function() {
+      var featurefiles = $('.feature_inputfile')[0].files.length;
+      console.log("feature :", featurefiles);
+      var file1s = $('.upload__inputfile')[0].files.length;
+      console.log("upload :", file1s);
+      if ((featurefiles > 0) && (file1s > 0)) {
+
+        $('#imgcheck').removeAttr('disabled');
+        $('#imgcheckalert').hide();
+        var current_fs, next_fs, previous_fs; //fieldsets
+        var opacity;
+
+        $('#imgcheck').click(function() {
+
+          current_fs = $(this).parent();
+          next_fs = $(this).parent().next();
+
+          //Add Class Active
+          $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+
+          //show the next fieldset
+          next_fs.show();
+          //hide the current fieldset with style
+          current_fs.animate({
+            opacity: 0
+          }, {
+            step: function(now) {
+              // for making fielset appear animation
+              opacity = 1 - now;
+
+              current_fs.css({
+                'display': 'none',
+                'position': 'relative'
+              });
+              next_fs.css({
+                'opacity': opacity
+              });
+            },
+            duration: 600
+          });
+        });
+
+      } else {
+
+        $('#imgcheck').attr('disabled');
+        $('#imgcheckalert').show();
+      }
+
+    });
+
+
 
     function ImgUpload() {
       var imgWrap = "";
@@ -1455,7 +1593,7 @@ function readImage() {
                 }
                 $('#imgcheck').removeAttr('disabled');
                 $('#imgcheckalert').hide();
-                
+
 
                 reader.readAsDataURL(f);
               }
@@ -1505,7 +1643,9 @@ function readImage() {
         });
       });
       $('.feature_inputfile').each(function() {
+
         $(this).on('change', function(e) {
+
           feaWrap = $(this).closest('.upload__box').find('.feature_img-wrap');
           var maxLength = $(this).attr('data-max_length');
           var files = e.target.files;
@@ -1533,7 +1673,7 @@ function readImage() {
 
                 var reader = new FileReader();
                 reader.onload = function(e) {
-                  var html = "<div class='upload__img-box'><div style='background-image: url(" + e.target.result + ")' data-number='" + $(".upload__img-close").length + "' data-file='" + f.name + "' class='img-bg'><div class='upload__img-close'></div></div></div>";
+                  var html = "<div class='upload__img-box2'><div style='background-image: url(" + e.target.result + ")' data-number='" + $(".upload__img-close2").length + "' data-file='" + f.name + "' class='img-bg'><div class='upload__img-close2'></div></div></div>";
                   feaWrap.append(html);
                   iterator++;
                 }
@@ -1543,7 +1683,7 @@ function readImage() {
           });
         });
       });
-      $('body').on('click', ".upload__img-close", function(e) {
+      $('body').on('click', ".upload__img-close2", function(e) {
         var file = $(this).parent().data("file");
         for (var i = 0; i < feaArray.length; i++) {
           if (feaArray[i].name === file) {
@@ -1552,8 +1692,8 @@ function readImage() {
             break;
           }
         }
-        if((feaArray.length==0)||(imgArray.length==0) ){
-          $('#imgcheck').attr('disabled','disabled');
+        if ((feaArray.length == 0) || (imgArray.length == 0)) {
+          $('#imgcheck').attr('disabled', 'disabled');
           $('#imgcheckalert').show();
         }
         $(this).parent().parent().remove();
@@ -1578,11 +1718,13 @@ function readImage() {
             break;
           }
         }
+        if ((feaArray.length == 0) || (imgArray.length == 0)) {
+          $('#imgcheck').attr('disabled', 'disabled');
+          $('#imgcheckalert').show();
+        }
         $(this).parent().parent().remove();
       });
     }
-
-
   </script>
 
 
@@ -1595,40 +1737,49 @@ function readImage() {
  -->
 
   <script type="text/javascript">
-//for input validation function
-(function($) {
-  $.fn.inputFilter = function(inputFilter) {
-    return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
-      if (inputFilter(this.value)) {
-        this.oldValue = this.value;
-        this.oldSelectionStart = this.selectionStart;
-        this.oldSelectionEnd = this.selectionEnd;
-      } else if (this.hasOwnProperty("oldValue")) {
-        this.value = this.oldValue;
-        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-      } else {
-        this.value = "";
-      }
+    //for input validation function
+    (function($) {
+      $.fn.inputFilter = function(inputFilter) {
+        return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function() {
+          if (inputFilter(this.value)) {
+            this.oldValue = this.value;
+            this.oldSelectionStart = this.selectionStart;
+            this.oldSelectionEnd = this.selectionEnd;
+          } else if (this.hasOwnProperty("oldValue")) {
+            this.value = this.oldValue;
+            this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+          } else {
+            this.value = "";
+          }
+        });
+      };
+    }(jQuery));
+
+    $("#ac_price").inputFilter(function(value) {
+      return /^\d*[.]?\d{0,2}$/.test(value);
     });
-  };
-}(jQuery));
-
-$("#ac_price").inputFilter(function(value) {
-  return /^\d*[.]?\d{0,2}$/.test(value); });
-  $("#one").inputFilter(function(value) {
-  return /^\d*[.]?\d*$/.test(value); });
-  $("#seven").inputFilter(function(value) {
-  return /^\d*[.]?\d*$/.test(value); });
-
-
-$(document).ready(function() {
+    $("#one").inputFilter(function(value) {
+      return /^\d*[.]?\d*$/.test(value);
+    });
+    $("#seven").inputFilter(function(value) {
+      return /^\d*[.]?\d*$/.test(value);
+    });
+    
+    $('input[name="mindays"]').inputFilter(function(value) {
+      return /^\d*$/.test(value);
+    });
+    $('input[name="maxdays"]').inputFilter(function(value) {
+      return /^\d*$/.test(value);
+    });
+    
+    $(document).ready(function() {
 
 
       $("#ac_price").on('change', function(e) {
         e.preventDefault();
 
 
-        
+
 
         // $("#gross_amount").val(total);
         var actual_price = parseFloat($("#ac_price").val());
@@ -1672,37 +1823,6 @@ $(document).ready(function() {
 
         // console.log(sub_total)
       });
-      $("body").on('change', function(e) {
-        e.preventDefault();
-
-        item_name = $('input[name="item_name"]').val();
-        brand = $('select[name="brand"]').val();
-        type = $('input[name="type"]').val();
-        item_price = $('input[name="item_price"]').val();
-        priceoneday = $('input[name="priceoneday"]').val();
-        pricesevenday = $('input[name="pricesevenday"]').val();
-        mindays = $('input[name="mindays"]').val();
-        maxdays = $('input[name="maxdays"]').val();
-        cat = $('select[name="cat"]').val();
-        su_cat = $('select[name="su_cat"]').val();
-        size = $('select[name="size"]').val();
-        item_condition = $('select[name="item_condition"]').val();
-        description = $('textarea[name="description"]').val();
-        tags = $('input[name="tags"]').val();
-        selectvalue='Select';
-        if((item_name!='')&&(brand!=selectvalue)&&(type!='')&&(item_price!='')&&(priceoneday!='')&&(pricesevenday!='')&&(mindays!='')&&(maxdays!='')&&(cat!=selectvalue)&&(su_cat!=selectvalue)&&(size!=selectvalue)&&(item_condition!=selectvalue)&&(description!='')&&(tags!=''))
-        {
-          $('#check2').removeAttr('disabled');
-          $('#checkalert_2').hide();
-            
-        }
-        else{
-          $('#check2').attr('disabled','disabled');
-          $('#checkalert_2').show();
-        }        
-      
-      })
-
     });
   </script>
   <script>
